@@ -1,111 +1,674 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Para Nohemí, con todo mi amor</title>
+    <meta name="description" content="Un jardín digital hecho con amor para Nohemí.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@300;400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Montserrat:wght@300;400;500&display=swap"
+        rel="stylesheet">
     <style>
-        /* Evitar el parpadeo de la fuente (FOUT) */
-        body {
-            opacity: 0;
-            transition: opacity 0.8s ease-in-out;
+        /* ===== RESET & BASE ===== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        body.fonts-loaded {
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fffafb;
+            overflow-x: hidden;
+            color: #4a3040;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        body.loaded {
             opacity: 1;
         }
 
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ===== CSS VARIABLES ===== */
         :root {
-            --primary-pink: #fce4ec;
-            --dark-pink: #f06292;
-            --accent-gold: #d4af37;
-            --tulip-red: #ff5252;
-            --tulip-pink: #ff80ab;
+            --pink-50: #fdf2f8;
+            --pink-100: #fce7f3;
+            --pink-200: #fbcfe8;
+            --pink-300: #f9a8d4;
+            --pink-400: #f472b6;
+            --pink-500: #ec4899;
+            --pink-600: #db2777;
+            --pink-700: #be185d;
+            --rose-gold: #b76e79;
+            --gold: #d4a574;
+            --cream: #fffdf9;
+            --soft-white: rgba(255, 255, 255, 0.9);
+            --glass-bg: rgba(255, 255, 255, 0.6);
+            --glass-border: rgba(255, 182, 193, 0.35);
+            --shadow-pink: rgba(236, 72, 153, 0.12);
+            --shadow-deep: rgba(190, 24, 93, 0.08);
+            --green-stem: #5b8a5a;
+            --green-leaf: #6da06c;
         }
 
-        body {
-            background-color: #fffafb;
-            font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-
-        h1, h2, .romantic-font {
+        /* ===== TYPOGRAPHY ===== */
+        .font-romantic {
             font-family: 'Dancing Script', cursive;
         }
 
-        .serif-font {
+        .font-serif {
             font-family: 'Playfair Display', serif;
         }
 
-        /* Animaciones de Entrada (Scroll) */
+        /* ===== ANIMATED BACKGROUND ===== */
+        .hero-bg {
+            background: linear-gradient(135deg,
+                    #fffafb 0%,
+                    #fdf2f8 25%,
+                    #fce7f3 50%,
+                    #fdf2f8 75%,
+                    #fffafb 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 12s ease infinite;
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            25% {
+                background-position: 100% 0%;
+            }
+
+            50% {
+                background-position: 100% 100%;
+            }
+
+            75% {
+                background-position: 0% 100%;
+            }
+        }
+
+        /* ===== PARTICLES / FIREFLIES ===== */
+        .firefly {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99;
+            animation: firefly-float linear infinite, firefly-pulse ease-in-out infinite;
+            will-change: transform, opacity;
+        }
+
+        @keyframes firefly-float {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+                transform: translate(var(--dx1), var(--dy1)) scale(1);
+            }
+
+            30% {
+                opacity: 0.7;
+                transform: translate(var(--dx2), var(--dy2)) scale(1.2);
+            }
+
+            50% {
+                opacity: 1;
+                transform: translate(var(--dx3), var(--dy3)) scale(0.9);
+            }
+
+            70% {
+                opacity: 0.8;
+                transform: translate(var(--dx4), var(--dy4)) scale(1.1);
+            }
+
+            90% {
+                opacity: 0.6;
+                transform: translate(var(--dx1), var(--dy3)) scale(1);
+            }
+
+            100% {
+                transform: translate(var(--dx2), var(--dy4)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        @keyframes firefly-pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 0 4px 2px var(--glow-color);
+            }
+
+            50% {
+                box-shadow: 0 0 12px 6px var(--glow-color);
+            }
+        }
+
+        /* ===== FALLING PETALS ===== */
+        .petal {
+            position: fixed;
+            top: -30px;
+            user-select: none;
+            pointer-events: none;
+            z-index: 100;
+            will-change: transform, opacity;
+            animation: petalFall linear forwards;
+        }
+
+        @keyframes petalFall {
+            0% {
+                transform: translateY(0) rotate(0deg) rotateX(0deg) scale(0.8);
+                opacity: 0;
+            }
+
+            8% {
+                opacity: 0.9;
+                transform: translateY(8vh) rotate(45deg) rotateX(30deg) scale(1);
+            }
+
+            25% {
+                transform: translateY(25vh) translateX(30px) rotate(120deg) rotateX(-20deg) scale(0.9);
+            }
+
+            50% {
+                transform: translateY(50vh) translateX(-20px) rotate(200deg) rotateX(40deg) scale(1);
+                opacity: 0.7;
+            }
+
+            75% {
+                transform: translateY(75vh) translateX(40px) rotate(290deg) rotateX(-30deg) scale(0.85);
+            }
+
+            92% {
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: translateY(110vh) translateX(-10px) rotate(360deg) rotateX(20deg) scale(0.7);
+                opacity: 0;
+            }
+        }
+
+        /* ===== SCROLL REVEAL ANIMATIONS ===== */
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 1s cubic-bezier(0.5, 0, 0, 1);
+            transition: all 1s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .reveal.from-bottom {
+            transform: translateY(60px);
+        }
+
+        .reveal.from-left {
+            transform: translateX(-60px);
+        }
+
+        .reveal.from-right {
+            transform: translateX(60px);
+        }
+
+        .reveal.from-scale {
+            transform: scale(0.85);
         }
 
         .reveal.active {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) translateX(0) scale(1);
         }
 
-        /* Animación de pétalos cayendo */
-        .petal {
-            position: fixed;
-            top: -10%;
-            user-select: none;
+        /* ===== GLASS CARD ===== */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 28px;
+            box-shadow:
+                0 8px 32px var(--shadow-pink),
+                0 2px 8px var(--shadow-deep),
+                inset 0 1px 0 rgba(255, 255, 255, 0.6);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 0.5s ease;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(255, 255, 255, 0.15),
+                    transparent);
+            transition: left 0.8s ease;
             pointer-events: none;
-            z-index: 100;
-            animation: fall linear infinite;
         }
 
-        @keyframes fall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        .glass-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow:
+                0 20px 50px var(--shadow-pink),
+                0 8px 20px var(--shadow-deep),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
         }
 
-        /* Estilo Dinámico para los Tulipanes */
+        .glass-card:hover::before {
+            left: 120%;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 36px;
+            border-radius: 100px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 500;
+            font-size: 15px;
+            letter-spacing: 0.5px;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            cursor: pointer;
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--pink-500), var(--pink-600));
+            color: white;
+            box-shadow: 0 4px 20px rgba(236, 72, 153, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(236, 72, 153, 0.45);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.85);
+            color: var(--pink-600);
+            border: 1.5px solid var(--pink-200);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            background: white;
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.15);
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .hero-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(3rem, 10vw, 6rem);
+            color: var(--pink-600);
+            margin-bottom: 16px;
+            line-height: 1.2;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes titleGlow {
+            0% {
+                text-shadow: 0 0 10px rgba(236, 72, 153, 0.15);
+                filter: brightness(1);
+            }
+
+            100% {
+                text-shadow:
+                    0 0 20px rgba(236, 72, 153, 0.25),
+                    0 0 60px rgba(236, 72, 153, 0.08);
+                filter: brightness(1.05);
+            }
+        }
+
+        .hero-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: clamp(1rem, 3vw, 1.4rem);
+            color: #7a6070;
+            max-width: 600px;
+            margin: 0 auto 32px;
+            line-height: 1.8;
+            padding: 0 16px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        @media (min-width: 640px) {
+            .hero-buttons {
+                flex-direction: row;
+                max-width: none;
+                width: auto;
+                gap: 16px;
+            }
+        }
+
+        /* Hero tulip SVG */
+        .hero-tulip {
+            margin-top: 40px;
+            animation: gentleSway 5s ease-in-out infinite alternate;
+            filter: drop-shadow(0 4px 12px rgba(240, 98, 146, 0.2));
+            transform-origin: bottom center;
+        }
+
+        @keyframes gentleSway {
+            0% {
+                transform: rotate(-4deg) translateY(0);
+            }
+
+            50% {
+                transform: rotate(0deg) translateY(-5px);
+            }
+
+            100% {
+                transform: rotate(4deg) translateY(0);
+            }
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            animation: scrollBounce 2.5s ease-in-out infinite;
+            opacity: 0.6;
+        }
+
+        .scroll-indicator span {
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--pink-400);
+        }
+
+        .scroll-arrow {
+            width: 20px;
+            height: 20px;
+            border-right: 2px solid var(--pink-400);
+            border-bottom: 2px solid var(--pink-400);
+            transform: rotate(45deg);
+        }
+
+        @keyframes scrollBounce {
+
+            0%,
+            100% {
+                transform: translateX(-50%) translateY(0);
+            }
+
+            50% {
+                transform: translateX(-50%) translateY(10px);
+            }
+        }
+
+        /* ===== MESSAGES SECTION ===== */
+        .messages-section {
+            padding: 80px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .messages-section {
+                padding: 120px 24px;
+            }
+        }
+
+        .messages-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 64px;
+        }
+
+        @media (min-width: 768px) {
+            .messages-grid {
+                gap: 100px;
+            }
+        }
+
+        .message-card {
+            padding: 40px 32px;
+            text-align: center;
+        }
+
+        @media (min-width: 768px) {
+            .message-card {
+                padding: 56px 48px;
+            }
+        }
+
+        .message-emoji {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 20px;
+            animation: emojiFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes emojiFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .message-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            color: var(--pink-500);
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .message-text {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+            color: #5a4550;
+            line-height: 1.9;
+        }
+
+        /* ===== SECTION DIVIDER ===== */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 20px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .divider-line {
+            width: 80px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--pink-300), transparent);
+        }
+
+        .divider-icon {
+            font-size: 1.2rem;
+            color: var(--pink-400);
+            animation: dividerPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes dividerPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.7;
+            }
+
+            50% {
+                transform: scale(1.2);
+                opacity: 1;
+            }
+        }
+
+        /* ===== TULIP GARDEN SECTION ===== */
+        .garden-section {
+            padding: 80px 20px;
+            background: linear-gradient(180deg, rgba(253, 242, 248, 0.3) 0%, rgba(252, 231, 243, 0.15) 100%);
+            position: relative;
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .garden-section {
+                padding: 120px 24px;
+            }
+        }
+
+        .garden-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 48px;
+        }
+
+        @media (min-width: 768px) {
+            .garden-header {
+                margin-bottom: 64px;
+            }
+        }
+
+        .garden-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 6vw, 3.5rem);
+            color: #3d2e38;
+            margin-bottom: 12px;
+        }
+
+        .garden-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            color: #7a6070;
+            max-width: 550px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Tulip Garden Grid */
         .tulip-garden {
             display: flex;
             justify-content: center;
             align-items: flex-end;
-            gap: 10px;
+            gap: 8px;
             flex-wrap: wrap;
-            padding: 40px 10px;
+            padding: 32px 8px;
             min-height: 200px;
+            max-width: 700px;
+            margin: 0 auto;
         }
 
+        @media (min-width: 768px) {
+            .tulip-garden {
+                gap: 12px;
+                padding: 40px 16px;
+            }
+        }
+
+        /* Tulip Styles */
         .tulip-container {
             position: relative;
-            width: 35px;
-            height: 120px;
+            width: 32px;
+            height: 110px;
             cursor: pointer;
             transform-origin: bottom center;
-            transform: scaleY(0); 
+            transform: scaleY(0);
             touch-action: manipulation;
+            transition: filter 0.3s ease;
         }
 
         @media (min-width: 768px) {
             .tulip-container {
-                width: 45px;
-                height: 160px;
+                width: 42px;
+                height: 155px;
             }
         }
 
+        .tulip-container:hover {
+            filter: brightness(1.08) drop-shadow(0 0 8px rgba(240, 98, 146, 0.3));
+        }
+
         .sprout {
-            animation: growUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            animation: growUp 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
         @keyframes growUp {
-            0% { transform: scaleY(0); }
-            70% { transform: scaleY(1.1); }
-            100% { transform: scaleY(1); }
+            0% {
+                transform: scaleY(0);
+            }
+
+            60% {
+                transform: scaleY(1.08);
+            }
+
+            80% {
+                transform: scaleY(0.97);
+            }
+
+            100% {
+                transform: scaleY(1);
+            }
         }
 
         .sway {
@@ -113,109 +676,268 @@
         }
 
         @keyframes swaying {
-            0% { transform: rotate(-5deg); }
-            100% { transform: rotate(5deg); }
-        }
+            0% {
+                transform: rotate(-4deg);
+            }
 
-        .tulip-container:hover .tulip-head {
-            transform: scale(1.1);
-            filter: brightness(1.1);
+            100% {
+                transform: rotate(4deg);
+            }
         }
 
         .tulip-head {
-            width: 30px;
-            height: 40px;
-            background: var(--tulip-pink);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            width: 28px;
+            height: 36px;
+            border-radius: 50% 50% 45% 45% / 60% 60% 40% 40%;
             position: absolute;
             top: 0;
-            left: 2px;
-            transition: all 0.3s ease;
+            left: 50%;
+            transform: translateX(-50%);
             z-index: 2;
-            box-shadow: inset -5px -5px 10px rgba(0,0,0,0.1);
+            box-shadow:
+                inset -4px -4px 8px rgba(0, 0, 0, 0.08),
+                inset 2px 2px 6px rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease;
         }
 
         @media (min-width: 768px) {
             .tulip-head {
-                width: 38px;
-                height: 50px;
+                width: 36px;
+                height: 46px;
             }
         }
 
-        .tulip-head::after, .tulip-head::before {
-            content: '';
-            position: absolute;
-            width: 50%;
-            height: 90%;
-            background: inherit;
-            border-radius: 50%;
-            border: 1px solid rgba(0,0,0,0.05);
+        .tulip-container:hover .tulip-head {
+            transform: translateX(-50%) scale(1.12);
         }
 
-        .tulip-head::before { left: -15%; transform: rotate(-15deg); }
-        .tulip-head::after { right: -15%; transform: rotate(15deg); }
+        .tulip-head::before,
+        .tulip-head::after {
+            content: '';
+            position: absolute;
+            width: 45%;
+            height: 85%;
+            background: inherit;
+            border-radius: 50%;
+            top: 5%;
+        }
+
+        .tulip-head::before {
+            left: -10%;
+            transform: rotate(-12deg);
+            filter: brightness(0.95);
+        }
+
+        .tulip-head::after {
+            right: -10%;
+            transform: rotate(12deg);
+            filter: brightness(1.08);
+        }
 
         .tulip-stem {
-            width: 4px;
-            height: 80px;
-            background: linear-gradient(to right, #388e3c, #4caf50);
+            width: 3px;
+            height: 70px;
+            background: linear-gradient(to bottom, var(--green-stem), var(--green-leaf));
             position: absolute;
-            top: 35px;
-            left: 15px;
-            border-radius: 5px;
+            top: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 4px;
             z-index: 1;
         }
 
         @media (min-width: 768px) {
             .tulip-stem {
-                width: 6px;
-                height: 120px;
-                top: 45px;
-                left: 19px;
+                width: 4px;
+                height: 110px;
+                top: 42px;
             }
         }
 
         .tulip-leaf {
-            width: 15px;
-            height: 30px;
-            background: linear-gradient(to top right, #388e3c, #4caf50);
+            width: 14px;
+            height: 26px;
+            background: linear-gradient(135deg, var(--green-stem), var(--green-leaf));
             position: absolute;
-            border-radius: 0 100% 0 100%;
-            bottom: 15px;
-            left: 18px;
-            transform: rotate(-30deg);
+            border-radius: 0 80% 0 80%;
+            bottom: 20px;
+            left: 55%;
+            transform: rotate(-25deg);
             transform-origin: bottom left;
-            animation: leafSway 3s ease-in-out infinite alternate;
+            animation: leafSway 3.5s ease-in-out infinite alternate;
+            z-index: 1;
+        }
+
+        .tulip-leaf-right {
+            border-radius: 80% 0 80% 0;
+            left: auto;
+            right: 55%;
+            transform: rotate(25deg);
+            transform-origin: bottom right;
+            animation-delay: -1.5s;
+            bottom: 30px;
         }
 
         @keyframes leafSway {
-            0% { transform: rotate(-30deg); }
-            100% { transform: rotate(-20deg); }
+            0% {
+                transform: rotate(-25deg);
+            }
+
+            100% {
+                transform: rotate(-18deg);
+            }
         }
 
+        /* Love Message */
+        .love-message-box {
+            height: 80px;
+            margin-top: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .love-message {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(1.5rem, 5vw, 2.8rem);
+            color: var(--pink-600);
+            font-weight: 700;
+            opacity: 0;
+            transition: all 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+            transform: translateY(10px);
+            padding: 0 16px;
+        }
+
+        .love-message.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Floating Heart */
         .floating-heart {
             position: absolute;
-            animation: floatUp 4s ease-in infinite;
-            opacity: 0;
-            color: var(--dark-pink);
+            pointer-events: none;
+            z-index: 50;
+            font-size: 1.2rem;
+            animation: heartFloat 3s ease-out forwards;
         }
 
-        @keyframes floatUp {
-            0% { transform: translateY(0) scale(0.5); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-100px) scale(1.2); opacity: 0; }
+        @keyframes heartFloat {
+            0% {
+                transform: translateY(0) scale(0.3) rotate(0deg);
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+                transform: translateY(-20px) scale(1) rotate(15deg);
+            }
+
+            100% {
+                transform: translateY(-120px) scale(0.5) rotate(-10deg);
+                opacity: 0;
+            }
         }
 
-        /* Estilos para el jardín de fondo - MEJORADO */
+        /* ===== LETTER SECTION ===== */
+        .letter-section {
+            padding: 80px 20px;
+            max-width: 750px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        @media (min-width: 768px) {
+            .letter-section {
+                padding: 120px 24px;
+            }
+        }
+
+        .letter-card {
+            padding: 48px 32px;
+            border-width: 2px;
+            border-color: var(--pink-200);
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .letter-card {
+                padding: 64px 56px;
+            }
+        }
+
+        .letter-seal {
+            position: absolute;
+            top: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, #fff 0%, #fdf2f8 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            border: 2px solid var(--pink-100);
+            box-shadow: 0 4px 16px rgba(236, 72, 153, 0.12);
+            animation: sealPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes sealPulse {
+
+            0%,
+            100% {
+                box-shadow: 0 4px 16px rgba(236, 72, 153, 0.12);
+            }
+
+            50% {
+                box-shadow: 0 4px 24px rgba(236, 72, 153, 0.25);
+            }
+        }
+
+        .letter-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2rem, 5vw, 2.8rem);
+            color: #3d2e38;
+            margin-bottom: 32px;
+            margin-top: 8px;
+        }
+
+        .letter-body {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1rem, 2.5vw, 1.15rem);
+            color: #5a4550;
+            line-height: 2;
+            text-align: left;
+        }
+
+        .letter-body p {
+            margin-bottom: 20px;
+        }
+
+        .letter-signature {
+            text-align: right;
+            font-style: italic;
+            font-weight: 700;
+            color: var(--pink-600);
+            font-size: clamp(1.2rem, 3vw, 1.5rem);
+            margin-top: 40px;
+            line-height: 1.6;
+        }
+
+        /* ===== BACKGROUND GARDEN ===== */
         #bg-garden {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 40vh;
+            height: 35vh;
             pointer-events: none;
             z-index: 0;
-            opacity: 0.25; /* Opacidad aumentada para visibilidad */
+            opacity: 0.18;
             overflow: hidden;
         }
 
@@ -227,274 +949,518 @@
         }
 
         @keyframes bgSway {
-            0% { transform: rotate(-6deg) translateY(0); }
-            100% { transform: rotate(6deg) translateY(-5px); }
-        }
+            0% {
+                transform: rotate(-5deg) translateY(0);
+            }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 182, 193, 0.4);
-            border-radius: 24px;
-            box-shadow: 0 15px 35px rgba(240, 98, 146, 0.1);
-        }
-
-        .hero-gradient {
-            background: linear-gradient(135deg, #fffafb 0%, #fce4ec 100%);
-        }
-
-        .glowing-text {
-            text-shadow: 0 0 15px rgba(240, 98, 146, 0.3);
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Fondo de Tulipanes Semi-transparente -->
-    <div id="bg-garden"></div>
-
-    <!-- Animación de Pétalos -->
-    <div id="petal-container" class="relative z-10"></div>
-
-    <!-- Hero Section -->
-    <section class="min-h-screen flex flex-col items-center justify-center text-center p-6 hero-gradient relative overflow-hidden z-10">
-        <div class="z-10 reveal active">
-            <h1 class="text-6xl md:text-8xl text-pink-600 mb-4 animate-pulse glowing-text">Hola, Piojosita</h1>
-            <p class="serif-font italic text-lg md:text-2xl text-gray-600 mb-8 max-w-2xl mx-auto px-4">
-                "Eres la casualidad más bonita que me ha pasado. Te amo."
-            </p>
-            <div class="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4">
-                <a href="#mensajes" class="w-full sm:w-auto bg-pink-500 hover:bg-pink-600 text-white px-10 py-4 rounded-full shadow-lg transition duration-300 font-medium">Mis Pensamientos</a>
-                <a href="#tulipanes" class="w-full sm:w-auto bg-white text-pink-500 border border-pink-200 px-10 py-4 rounded-full shadow-md hover:shadow-xl transition duration-300 font-medium">Tu Jardín</a>
-            </div>
-        </div>
-        
-        <div class="mt-12 md:mt-16 opacity-90 reveal active" style="transition-delay: 0.3s;">
-            <svg width="80" height="120" viewBox="0 0 100 150" class="sway md:w-[100px] md:h-[150px]">
-                <path d="M50,150 L50,60" stroke="#4caf50" stroke-width="5" stroke-linecap="round" fill="none" />
-                <path d="M50,110 Q30,100 20,80" stroke="#4caf50" stroke-width="4" stroke-linecap="round" fill="none" />
-                <path d="M50,40 Q50,0 30,10 Q20,20 20,40 Q20,60 50,70 Q80,60 80,40 Q80,20 70,10 Q50,0 50,40" fill="#f06292" />
-                <path d="M50,40 Q60,10 70,15 Q80,25 75,45 Q65,60 50,70" fill="#ff80ab" />
-                <path d="M50,40 Q40,10 30,15 Q20,25 25,45 Q35,60 50,70" fill="#ff4081" />
-            </svg>
-        </div>
-    </section>
-
-    <!-- Sección de Mensajes Románticos -->
-    <section id="mensajes" class="py-20 md:py-32 px-4 max-w-4xl mx-auto relative z-10">
-        <div class="space-y-20 md:space-y-32">
-            <div class="reveal text-center">
-                <div class="inline-block glass-card p-8 md:p-14 transform hover:scale-105 transition duration-500 w-full md:w-auto">
-                    <span class="text-5xl block mb-6">✨</span>
-                    <h3 class="romantic-font text-4xl md:text-5xl text-pink-500 mb-6">Mi pensamiento favorito...</h3>
-                    <p class="serif-font text-xl md:text-2xl text-gray-700 leading-relaxed">
-                        Es aquel en el que apareces tú. Me encanta cómo, sin importar lo que esté haciendo, mi mente siempre encuentra el camino de regreso a ti.
-                    </p>
-                </div>
-            </div>
-
-            <div class="reveal text-center md:text-right">
-                <div class="inline-block glass-card border-pink-200 p-8 md:p-14 bg-pink-50/50 transform hover:scale-105 transition duration-500 w-full md:w-auto">
-                    <span class="text-5xl block mb-6">🌸</span>
-                    <h3 class="romantic-font text-4xl md:text-5xl text-pink-500 mb-6">Mi parte favorita del dia</h3>
-                    <p class="serif-font text-xl md:text-2xl text-gray-700 leading-relaxed">
-                        Si pudiera guardar un solo momento del dia, elegiría cuando regresas a mi. Eres la magia de mis días, Nohemí.
-                    </p>
-                </div>
-            </div>
-
-            <div class="reveal text-center md:text-left">
-                <div class="inline-block glass-card p-8 md:p-14 transform hover:scale-105 transition duration-500 w-full md:w-auto">
-                    <span class="text-5xl block mb-6">💫</span>
-                    <h3 class="romantic-font text-4xl md:text-5xl text-pink-500 mb-6">Mi mundo entero</h3>
-                    <p class="serif-font text-xl md:text-2xl text-gray-700 leading-relaxed">
-                        No necesito mirar las estrellas cuando puedo verte a ti. Todo lo hermoso, lo tierno y lo perfecto se resume en tus ojos.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Interactiva de Tulipanes -->
-    <section id="tulipanes" class="py-20 md:py-32 bg-pink-50/30 relative overflow-hidden z-10">
-        <div class="max-w-5xl mx-auto text-center px-6 reveal">
-            <h2 class="text-5xl md:text-6xl text-gray-800 mb-6 romantic-font">Tu jardin</h2>
-            <p class="serif-font text-lg md:text-xl text-gray-600 mb-12 md:mb-16 max-w-2xl mx-auto">
-                He hecho cada uno de estos tulipanes pensando en ti. Puedes tocarlos y veras mensajes bonitos <3.
-            </p>
-            
-            <div class="tulip-garden" id="garden">
-                <!-- Generados por JS -->
-            </div>
-            
-            <div class="h-24 mt-8 md:mt-12 flex items-center justify-center">
-                <div id="love-message" class="romantic-font text-3xl md:text-5xl text-pink-600 font-bold opacity-0 transition-all duration-700 transform translate-y-4 px-4">
-                    ¡Te amo muchísimo!
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Carta Final -->
-    <section class="py-20 md:py-32 px-4 max-w-3xl mx-auto text-center reveal relative z-10">
-        <div class="glass-card p-8 md:p-16 border-2 border-pink-200 relative shadow-2xl">
-            <div class="absolute -top-10 left-1/2 transform -translate-x-1/2 bg-white px-8 py-3 rounded-full border border-pink-100 shadow-md">
-                <span class="text-5xl">💌</span>
-            </div>
-            <h2 class="text-4xl md:text-5xl text-gray-800 mb-10 romantic-font">Para mi niña hermosa</h2>
-            <div class="serif-font text-lg md:text-xl text-gray-700 leading-relaxed space-y-6 text-left">
-                <p>Nohemí,</p>
-                <p>Quería regalarte algo diferente, algo que pudieras llevar siempre contigo. Este pequeño jardín con tus flores favoritas es un reflejo de lo que siento por ti.</p>
-                <p>Gracias por ser mi apoyo, mi mejor amiga y esa señorita por la cual mi corazon late mas rapido. Espero que cada vez que entres aquí, recuerdes que alguien te piensa y te ama con todo el corazón.</p>
-                <p class="text-right italic mt-12 font-bold text-pink-600 text-2xl">Con amor eterno,<br>Tu peloncito</p>
-            </div>
-        </div>
-    </section>
-
-    <footer class="py-12 text-center text-gray-400 text-sm reveal relative z-10">
-        Hecho con ❤️ especialmente para mi Piojosita.
-    </footer>
-
-    <script>
-        // Carga de fuentes
-        document.fonts.ready.then(() => {
-            document.body.classList.add('fonts-loaded');
-        });
-
-        // Crear jardín de fondo
-        function createBackgroundGarden() {
-            const bgGarden = document.getElementById('bg-garden');
-            const vw = window.innerWidth;
-            const spacing = vw < 768 ? 20 : 35; 
-            const numTulips = Math.floor(vw / spacing);
-            const backgroundColors = ['#f8bbd0', '#f48fb1', '#ffc1e3', '#fce4ec', '#f06292'];
-
-            for (let i = 0; i < numTulips; i++) {
-                const tulip = document.createElement('div');
-                tulip.className = 'bg-tulip';
-                const leftPos = (i / numTulips) * 100 + (Math.random() * 2);
-                const scale = (vw < 768 ? 0.35 : 0.5) + Math.random() * 0.4;
-                const animationDuration = 3 + Math.random() * 3;
-                const animationDelay = Math.random() * 5;
-                const color = backgroundColors[Math.floor(Math.random() * backgroundColors.length)];
-                
-                tulip.style.left = `${leftPos}%`;
-                tulip.style.transform = `scale(${scale})`;
-                tulip.style.animationDuration = `${animationDuration}s`;
-                tulip.style.animationDelay = `-${animationDelay}s`;
-                tulip.style.zIndex = Math.floor(Math.random() * 5);
-
-                tulip.innerHTML = `
-                    <svg width="40" height="150" viewBox="0 0 40 150">
-                        <path d="M20,150 L20,60" stroke="#81c784" stroke-width="3" fill="none" />
-                        <path d="M20,40 Q20,0 10,10 Q5,20 5,40 Q5,60 20,70 Q35,60 35,40 Q35,20 30,10 Q20,0 20,40" fill="${color}" />
-                    </svg>
-                `;
-                bgGarden.appendChild(tulip);
+            100% {
+                transform: rotate(5deg) translateY(-4px);
             }
         }
 
-        // Ejecutar creación de fondo
-        createBackgroundGarden();
+        /* ===== FOOTER ===== */
+        .footer {
+            padding: 48px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
 
-        // Intersection Observer para animaciones
-        const revealElements = document.querySelectorAll('.reveal');
+        .footer-text {
+            font-size: 0.85rem;
+            color: #b8a0b0;
+            letter-spacing: 0.5px;
+        }
+
+        .footer-heart {
+            display: inline-block;
+            animation: heartBeat 1.5s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            15% {
+                transform: scale(1.25);
+            }
+
+            30% {
+                transform: scale(1);
+            }
+
+            45% {
+                transform: scale(1.15);
+            }
+
+            60% {
+                transform: scale(1);
+            }
+        }
+
+        /* ===== UTILITIES ===== */
+        .text-center {
+            text-align: center;
+        }
+
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Smooth scroll offset for anchors */
+        #mensajes,
+        #tulipanes {
+            scroll-margin-top: 40px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Background Garden -->
+    <div id="bg-garden"></div>
+
+    <!-- Petal Container -->
+    <div id="petal-container"></div>
+
+    <!-- Firefly Container -->
+    <div id="firefly-container"></div>
+
+    <!-- ===== HERO SECTION ===== -->
+    <section class="hero hero-bg">
+        <div class="reveal from-scale active" style="z-index: 10;">
+            <h1 class="hero-title">Hola, Piojosita</h1>
+            <p class="hero-subtitle">
+                "Eres la casualidad más bonita que me ha pasado. Te amo."
+            </p>
+            <div class="hero-buttons">
+                <a href="#mensajes" class="btn btn-primary">Mis Pensamientos</a>
+                <a href="#tulipanes" class="btn btn-secondary">Tu Jardín</a>
+            </div>
+        </div>
+
+        <div class="hero-tulip reveal from-bottom active" style="transition-delay: 0.4s; z-index: 10;">
+            <svg width="100" height="200" viewBox="0 0 100 200" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <linearGradient id="stem-grad" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#3d7a3d" />
+                        <stop offset="50%" stop-color="#5a9a5a" />
+                        <stop offset="100%" stop-color="#4a8a4a" />
+                    </linearGradient>
+                    <radialGradient id="petal-center" cx="50%" cy="35%" r="55%">
+                        <stop offset="0%" stop-color="#ff9ec5" />
+                        <stop offset="50%" stop-color="#ff80ab" />
+                        <stop offset="100%" stop-color="#ec407a" />
+                    </radialGradient>
+                    <linearGradient id="leaf-grad" x1="0" y1="0" x2="0.5" y2="1">
+                        <stop offset="0%" stop-color="#5a9a5a" />
+                        <stop offset="100%" stop-color="#3d7a3d" />
+                    </linearGradient>
+                </defs>
+                <!-- Tallo principal -->
+                <path d="M50,195 C50,195 49,140 50,80" stroke="url(#stem-grad)" stroke-width="5" stroke-linecap="round"
+                    fill="none" />
+                <!-- Ramita de hoja izquierda -->
+                <path d="M50,145 Q35,135 25,115" stroke="url(#stem-grad)" stroke-width="3" stroke-linecap="round"
+                    fill="none" />
+                <!-- Hoja izquierda -->
+                <ellipse cx="20" cy="108" rx="10" ry="18" fill="url(#leaf-grad)" transform="rotate(-35, 20, 108)"
+                    opacity="0.85" />
+                <!-- Ramita de hoja derecha -->
+                <path d="M50,160 Q62,152 72,135" stroke="url(#stem-grad)" stroke-width="2.5" stroke-linecap="round"
+                    fill="none" />
+                <!-- Hoja derecha -->
+                <ellipse cx="76" cy="128" rx="8" ry="15" fill="url(#leaf-grad)" transform="rotate(30, 76, 128)"
+                    opacity="0.75" />
+                <!-- Pétalos del tulipán (capa posterior) -->
+                <path d="M50,55 Q50,10 30,22 Q18,32 20,55 Q22,75 50,85 Q78,75 80,55 Q82,32 70,22 Q50,10 50,55"
+                    fill="url(#petal-center)" />
+                <!-- Pétalo derecho (reflejo de luz) -->
+                <path d="M50,55 Q58,18 68,25 Q78,35 76,58 Q70,75 50,85" fill="#ffadd2" opacity="0.7" />
+                <!-- Pétalo izquierdo (sombra) -->
+                <path d="M50,55 Q42,18 32,25 Q22,35 24,58 Q30,75 50,85" fill="#d6336c" opacity="0.3" />
+                <!-- Centro del tulipán -->
+                <path d="M50,55 Q47,40 44,48 Q42,55 50,65 Q58,55 56,48 Q53,40 50,55" fill="#ff80ab" opacity="0.5" />
+                <!-- Pequeño brillo -->
+                <ellipse cx="42" cy="42" rx="3" ry="5" fill="white" opacity="0.25" transform="rotate(-15, 42, 42)" />
+            </svg>
+        </div>
+
+        <div class="scroll-indicator">
+            <span>scroll</span>
+            <div class="scroll-arrow"></div>
+        </div>
+    </section>
+
+    <!-- ===== DIVIDER ===== -->
+    <div class="section-divider">
+        <div class="divider-line"></div>
+        <span class="divider-icon">🌷</span>
+        <div class="divider-line"></div>
+    </div>
+
+    <!-- ===== MESSAGES SECTION ===== -->
+    <section id="mensajes" class="messages-section">
+        <div class="messages-grid">
+
+            <div class="reveal from-bottom">
+                <div class="glass-card message-card">
+                    <span class="message-emoji">✨</span>
+                    <h3 class="message-title">Mi pensamiento favorito...</h3>
+                    <p class="message-text">
+                        Es aquel en el que apareces tú. Me encanta cómo, sin importar lo que esté haciendo, mi mente
+                        siempre encuentra el camino de regreso a ti.
+                    </p>
+                </div>
+            </div>
+
+            <div class="reveal from-right">
+                <div class="glass-card message-card" style="background: rgba(253, 242, 248, 0.65);">
+                    <span class="message-emoji" style="animation-delay: -1s;">🌸</span>
+                    <h3 class="message-title">Mi parte favorita del dia</h3>
+                    <p class="message-text">
+                        Si pudiera guardar un solo momento del dia, elegiría cuando regresas a mi. Eres la magia de mis
+                        días, Nohemí.
+                    </p>
+                </div>
+            </div>
+
+            <div class="reveal from-left">
+                <div class="glass-card message-card">
+                    <span class="message-emoji" style="animation-delay: -2s;">💫</span>
+                    <h3 class="message-title">Mi mundo entero</h3>
+                    <p class="message-text">
+                        No necesito mirar las estrellas cuando puedo verte a ti. Todo lo hermoso, lo tierno y lo
+                        perfecto se resume en tus ojos.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ===== DIVIDER ===== -->
+    <div class="section-divider">
+        <div class="divider-line"></div>
+        <span class="divider-icon">💐</span>
+        <div class="divider-line"></div>
+    </div>
+
+    <!-- ===== TULIP GARDEN SECTION ===== -->
+    <section id="tulipanes" class="garden-section">
+        <div class="garden-header reveal from-bottom">
+            <h2 class="garden-title">Tu jardin</h2>
+            <p class="garden-subtitle">
+                He hecho cada uno de estos tulipanes pensando en ti. Puedes tocarlos y veras mensajes bonitos &lt;3.
+            </p>
+        </div>
+
+        <div class="tulip-garden" id="garden">
+            <!-- Generated by JS -->
+        </div>
+
+        <div class="love-message-box">
+            <div id="love-message" class="love-message">
+                ¡Te amo muchísimo!
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== DIVIDER ===== -->
+    <div class="section-divider">
+        <div class="divider-line"></div>
+        <span class="divider-icon">💌</span>
+        <div class="divider-line"></div>
+    </div>
+
+    <!-- ===== LETTER SECTION ===== -->
+    <section class="letter-section reveal from-scale">
+        <div class="glass-card letter-card">
+            <div class="letter-seal">💌</div>
+            <h2 class="letter-title">Para mi niña hermosa</h2>
+            <div class="letter-body">
+                <p>Nohemí,</p>
+                <p>Quería regalarte algo diferente, algo que pudieras llevar siempre contigo. Este pequeño jardín con
+                    tus flores favoritas es un reflejo de lo que siento por ti.</p>
+                <p>Gracias por ser mi apoyo, mi mejor amiga y esa señorita por la cual mi corazon late mas rapido.
+                    Espero que cada vez que entres aquí, recuerdes que alguien te piensa y te ama con todo el corazón.
+                </p>
+                <p class="letter-signature">Con amor eterno,<br>Tu peloncito</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer reveal from-bottom">
+        <p class="footer-text">
+            Hecho con <span class="footer-heart">❤️</span> especialmente para mi Piojosita.
+        </p>
+    </footer>
+
+    <script>
+        // ===== FONT LOADING =====
+        document.fonts.ready.then(() => document.body.classList.add('loaded'));
+        // Fallback: show content after 2.5s max
+        setTimeout(() => document.body.classList.add('loaded'), 2500);
+
+        // ===== INTERSECTION OBSERVER FOR REVEALS =====
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                    if(entry.target.querySelector('#garden')) {
+
+                    // If garden section becomes visible, animate tulips
+                    if (entry.target.querySelector('#garden') || entry.target.closest('.garden-section')) {
                         const tulips = document.querySelectorAll('.tulip-container');
-                        tulips.forEach((tulip, index) => {
+                        tulips.forEach((tulip, i) => {
                             setTimeout(() => {
                                 tulip.classList.add('sprout');
-                                tulip.classList.add('sway');
-                            }, index * 80);
+                                setTimeout(() => tulip.classList.add('sway'), 1200);
+                            }, i * 90);
                         });
                     }
+
+                    revealObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.1 });
+        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
-        revealElements.forEach(el => revealObserver.observe(el));
+        document.querySelectorAll('.reveal').forEach(el => {
+            if (!el.classList.contains('active')) {
+                revealObserver.observe(el);
+            }
+        });
 
-        // Pétalos cayendo
+        // ===== FALLING PETALS =====
         const petalContainer = document.getElementById('petal-container');
-        const colors = ['#fce4ec', '#f8bbd0', '#f48fb1', '#ffc1e3'];
+        const petalColors = ['#fce7f3', '#fbcfe8', '#f9a8d4', '#fdf2f8', '#fecdd3'];
+        const petalShapes = [
+            '50% 0 50% 50% / 50% 50% 50% 50%',
+            '0 80% 0 80%',
+            '50% 50% 50% 50% / 60% 60% 40% 40%',
+            '80% 0 80% 0',
+        ];
+        let petalCount = 0;
+        const maxPetals = 15;
 
         function createPetal() {
+            if (petalCount >= maxPetals) return;
+            petalCount++;
+
             const petal = document.createElement('div');
             petal.className = 'petal';
-            const size = Math.random() * 10 + 10 + 'px';
-            petal.style.width = size;
-            petal.style.height = size;
-            petal.style.background = colors[Math.floor(Math.random() * colors.length)];
+            const size = 8 + Math.random() * 12;
+            petal.style.width = size + 'px';
+            petal.style.height = size * (0.8 + Math.random() * 0.4) + 'px';
+            petal.style.background = petalColors[Math.floor(Math.random() * petalColors.length)];
             petal.style.left = Math.random() * 100 + 'vw';
-            petal.style.animationDuration = Math.random() * 3 + 4 + 's';
-            petal.style.opacity = Math.random() * 0.7 + 0.3;
-            petal.style.borderRadius = '0 100% 0 100%';
-            petalContainer.appendChild(petal);
-            setTimeout(() => petal.remove(), 7000);
-        }
-        setInterval(createPetal, 500);
+            petal.style.borderRadius = petalShapes[Math.floor(Math.random() * petalShapes.length)];
 
-        // Jardín interactivo
-        const garden = document.getElementById('garden');
-        const messages = [
-            "Eres mi niña preciosa 🌷", "Me haces el hombre más feliz", 
-            "Mi lugar favorito es a tu lado", "Amo cada detalle de ti", "Te amo de aquí al infinito (y un poquito más)",
-            "Eres mi inspiración diaria", "Siempre cuidaré de tu corazón", 
-            "Te amo más que ayer", "Mi hermosa Nohemí ❤️", "Siempre serás mi prioridad número uno",
-            "Los piojitos te tienen negrita", "Me pierdo en tus ojos", "Eres el refugio donde siempre quiero estar",
-            "Siempre estare contigo", "A tu lado todo es mejor", "Eres mi recordatorio favorito de que la vida es bella"
+            const duration = 5 + Math.random() * 4;
+            petal.style.animationDuration = duration + 's';
+            petal.style.opacity = 0.4 + Math.random() * 0.5;
+
+            petalContainer.appendChild(petal);
+
+            setTimeout(() => {
+                petal.remove();
+                petalCount--;
+            }, duration * 1000);
+        }
+
+        setInterval(createPetal, 700);
+
+        // ===== FIREFLIES =====
+        const fireflyContainer = document.getElementById('firefly-container');
+        const fireflyColors = [
+            { bg: 'rgba(255, 182, 218, 0.9)', glow: 'rgba(255, 150, 200, 0.6)' },
+            { bg: 'rgba(255, 200, 230, 0.95)', glow: 'rgba(255, 180, 220, 0.5)' },
+            { bg: 'rgba(248, 187, 208, 0.9)', glow: 'rgba(240, 150, 190, 0.55)' },
+            { bg: 'rgba(255, 220, 240, 0.95)', glow: 'rgba(255, 200, 230, 0.5)' },
+            { bg: 'rgba(255, 255, 200, 0.9)', glow: 'rgba(255, 255, 150, 0.5)' },
         ];
 
-        const tulipColors = ['#f06292', '#ff5252', '#ff80ab', '#ff4081', '#f48fb1', '#ffb22c'];
+        function createFirefly() {
+            const ff = document.createElement('div');
+            ff.className = 'firefly';
+
+            const size = 4 + Math.random() * 6;
+            const colorSet = fireflyColors[Math.floor(Math.random() * fireflyColors.length)];
+
+            ff.style.width = size + 'px';
+            ff.style.height = size + 'px';
+            ff.style.background = `radial-gradient(circle, ${colorSet.bg} 0%, transparent 70%)`;
+            ff.style.setProperty('--glow-color', colorSet.glow);
+            ff.style.boxShadow = `0 0 ${size * 2}px ${size}px ${colorSet.glow}`;
+            ff.style.left = Math.random() * 100 + 'vw';
+            ff.style.top = (10 + Math.random() * 80) + 'vh';
+
+            const r = () => (Math.random() - 0.5) * 200;
+
+            ff.style.setProperty('--dx1', r() + 'px');
+            ff.style.setProperty('--dy1', r() + 'px');
+            ff.style.setProperty('--dx2', r() + 'px');
+            ff.style.setProperty('--dy2', r() + 'px');
+            ff.style.setProperty('--dx3', r() + 'px');
+            ff.style.setProperty('--dy3', r() + 'px');
+            ff.style.setProperty('--dx4', r() + 'px');
+            ff.style.setProperty('--dy4', r() + 'px');
+
+            const floatDuration = 8 + Math.random() * 10;
+            const pulseDuration = 2 + Math.random() * 3;
+            ff.style.animationDuration = `${floatDuration}s, ${pulseDuration}s`;
+            ff.style.animationDelay = `0s, ${Math.random() * 2}s`;
+
+            fireflyContainer.appendChild(ff);
+            setTimeout(() => ff.remove(), floatDuration * 1000);
+        }
+
+        // Create a generous initial batch with stagger
+        for (let i = 0; i < 15; i++) {
+            setTimeout(createFirefly, i * 400);
+        }
+        // Keep spawning more frequently
+        setInterval(createFirefly, 1200);
+
+        // ===== BACKGROUND GARDEN =====
+        function createBackgroundGarden() {
+            const bgGarden = document.getElementById('bg-garden');
+            const vw = window.innerWidth;
+            const spacing = vw < 768 ? 22 : 38;
+            const numTulips = Math.floor(vw / spacing);
+            const bgColors = ['#f8bbd0', '#f48fb1', '#ffc1e3', '#fce4ec', '#f06292', '#ffb3c6'];
+
+            for (let i = 0; i < numTulips; i++) {
+                const tulip = document.createElement('div');
+                tulip.className = 'bg-tulip';
+                const leftPos = (i / numTulips) * 100 + Math.random() * 2;
+                const scale = (vw < 768 ? 0.3 : 0.45) + Math.random() * 0.4;
+                const dur = 3 + Math.random() * 4;
+                const delay = Math.random() * 5;
+                const color = bgColors[Math.floor(Math.random() * bgColors.length)];
+
+                tulip.style.left = leftPos + '%';
+                tulip.style.transform = 'scale(' + scale + ')';
+                tulip.style.animationDuration = dur + 's';
+                tulip.style.animationDelay = '-' + delay + 's';
+                tulip.style.zIndex = Math.floor(Math.random() * 5);
+
+                tulip.innerHTML = `
+                    <svg width="40" height="150" viewBox="0 0 40 150">
+                        <path d="M20,150 L20,60" stroke="#81c784" stroke-width="3" fill="none"/>
+                        <path d="M20,40 Q20,0 10,10 Q5,20 5,40 Q5,60 20,70 Q35,60 35,40 Q35,20 30,10 Q20,0 20,40" fill="${color}"/>
+                    </svg>`;
+                bgGarden.appendChild(tulip);
+            }
+        }
+
+        createBackgroundGarden();
+
+        // ===== INTERACTIVE TULIP GARDEN =====
+        const garden = document.getElementById('garden');
+        const messages = [
+            "Eres mi niña preciosa 🌷", "Me haces el hombre más feliz",
+            "Mi lugar favorito es a tu lado", "Amo cada detalle de ti",
+            "Te amo de aquí al infinito (y un poquito más)",
+            "Eres mi inspiración diaria", "Siempre cuidaré de tu corazón",
+            "Te amo más que ayer", "Mi hermosa Nohemí ❤️",
+            "Siempre serás mi prioridad número uno",
+            "Los piojitos te tienen negrita", "Me pierdo en tus ojos",
+            "Eres el refugio donde siempre quiero estar",
+            "Siempre estare contigo", "A tu lado todo es mejor",
+            "Eres mi recordatorio favorito de que la vida es bella"
+        ];
+
+        const tulipColors = [
+            '#f06292', '#ff5252', '#ff80ab', '#ff4081',
+            '#f48fb1', '#ffb22c', '#e91e63', '#ff6f91'
+        ];
         const vw = window.innerWidth;
         const tulipCount = vw < 768 ? 10 : 18;
+        let lastMessage = -1;
 
         for (let i = 0; i < tulipCount; i++) {
             const tulipWrapper = document.createElement('div');
             tulipWrapper.className = 'tulip-container';
-            const randomColor = tulipColors[Math.floor(Math.random() * tulipColors.length)];
-            const randomHeight = vw < 768 ? (100 + Math.random() * 20) : (140 + Math.random() * 30);
-            
-            tulipWrapper.style.height = `${randomHeight}px`;
+            const color = tulipColors[Math.floor(Math.random() * tulipColors.length)];
+            const h = vw < 768 ? (95 + Math.random() * 25) : (135 + Math.random() * 30);
+
+            tulipWrapper.style.height = h + 'px';
+            tulipWrapper.style.animationDelay = (Math.random() * 2) + 's';
+
+            const stemH = h - 36;
             tulipWrapper.innerHTML = `
-                <div class="tulip-head" style="background: ${randomColor};"></div>
-                <div class="tulip-stem" style="height: ${randomHeight - 30}px;"></div>
+                <div class="tulip-head" style="background: ${color};"></div>
+                <div class="tulip-stem" style="height: ${stemH}px;"></div>
                 <div class="tulip-leaf"></div>
+                <div class="tulip-leaf tulip-leaf-right"></div>
             `;
-            
-            tulipWrapper.onclick = (e) => {
-                createBurst(e.pageX, e.pageY);
+
+            tulipWrapper.addEventListener('click', function (e) {
+                // Burst of hearts
+                const rect = this.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top;
+
+                for (let j = 0; j < 5; j++) {
+                    setTimeout(() => {
+                        const heart = document.createElement('div');
+                        const emojis = ['❤️', '✨', '💖', '💕', '🌸'];
+                        heart.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                        heart.className = 'floating-heart';
+                        heart.style.left = (x + (Math.random() * 60 - 30)) + 'px';
+                        heart.style.top = (y + window.scrollY + (Math.random() * 30 - 15)) + 'px';
+                        document.body.appendChild(heart);
+                        setTimeout(() => heart.remove(), 3000);
+                    }, j * 80);
+                }
+
+                // Show a unique message
                 const msgBox = document.getElementById('love-message');
-                msgBox.style.opacity = 0;
-                msgBox.style.transform = 'translateY(10px)';
+                msgBox.classList.remove('visible');
+
                 setTimeout(() => {
-                    msgBox.innerText = messages[Math.floor(Math.random() * messages.length)];
-                    msgBox.style.opacity = 1;
-                    msgBox.style.transform = 'translateY(0)';
-                }, 300);
-            };
+                    let idx;
+                    do {
+                        idx = Math.floor(Math.random() * messages.length);
+                    } while (idx === lastMessage && messages.length > 1);
+                    lastMessage = idx;
+
+                    msgBox.textContent = messages[idx];
+                    msgBox.classList.add('visible');
+                }, 350);
+            });
+
             garden.appendChild(tulipWrapper);
         }
 
-        function createBurst(x, y) {
-            for(let i=0; i<4; i++) {
-                setTimeout(() => showHeart(x + (Math.random() * 60 - 30), y + (Math.random() * 60 - 30)), i * 100);
-            }
-        }
+        // ===== HANDLE RESIZE =====
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const bgGarden = document.getElementById('bg-garden');
+                bgGarden.innerHTML = '';
+                createBackgroundGarden();
+            }, 500);
+        });
 
-        function showHeart(x, y) {
-            const heart = document.createElement('div');
-            heart.innerHTML = '✨❤️';
-            heart.className = 'floating-heart text-2xl absolute pointer-events-none z-50';
-            heart.style.left = x + 'px';
-            heart.style.top = y + 'px';
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 4000);
-        }
+        // ===== HIDE SCROLL INDICATOR ON SCROLL =====
+        const scrollIndicator = document.querySelector('.scroll-indicator');
+        let scrollHidden = false;
+
+        window.addEventListener('scroll', () => {
+            if (!scrollHidden && window.scrollY > 100) {
+                scrollIndicator.style.opacity = '0';
+                scrollIndicator.style.transition = 'opacity 0.5s ease';
+                scrollHidden = true;
+            }
+        }, { passive: true });
     </script>
 </body>
+
 </html>
